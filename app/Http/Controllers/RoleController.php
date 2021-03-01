@@ -120,11 +120,11 @@ class RoleController extends Controller
     private function validateRole(Request $request,$id = null)
     {
         $rules =  ['permissions' => 'required'];
-        if ($id){
+        /*if ($id){
             $rules['name'] = 'required|unique:roles,'.$id;
         }else{
             $rules['name'] = 'required|unique:roles';
-        }
+        }*/
         return $request->validate($rules);
     }
 }
