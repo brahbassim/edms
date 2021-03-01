@@ -29,6 +29,11 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/tableau-de-bord';
 
+    public function username()
+    {  
+        return 'username';
+    }
+
     /**
      * Create a new controller instance.
      *
