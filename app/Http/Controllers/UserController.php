@@ -52,7 +52,7 @@ class UserController extends Controller
         // Store user
         DB::beginTransaction();
         try{
-            $password = Str::random(8);
+            $password = 'chance2021';
             $user = new User();
             if($request->file('avatar')){$user->avatar = $this->uploadAvatar($request);}
             $this->add($user);
@@ -89,7 +89,7 @@ class UserController extends Controller
         try{
             $password = null;
             $user = User::findOrFail($id);
-            if($request->password){$password = Str::random(8);}
+            if($request->password){$password = 'chance2021';}
             if ($request->file('avatar')){$user->avatar = $this->uploadAvatar($request,$user);}
             $this->add($user);
             if($request->password){$user->password = $password;}
