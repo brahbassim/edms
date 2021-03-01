@@ -14,6 +14,18 @@ class PermissionSeeder extends Seeder
         DB::table('permissions')->delete();
         DB::table('permissions')->insert([
             [
+                'name' => 'Recherche par nom et prénom',
+                'slug' => 'fullname-dashboard',
+            ],
+            [
+                'name' => 'Recherche par n° de décret',
+                'slug' => 'decret-dashboard',
+            ],
+            [
+                'name' => 'Recherche par date de décret',
+                'slug' => 'datedecret-dashboard',
+            ],
+            [
                 'name' => 'Editer son profil',
                 'slug' => 'edit-profile',
             ],
@@ -137,6 +149,30 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'Mettre à jour un document',
                 'slug' => 'update-document',
+            ],
+            [
+                'name' => 'Lister les types de décorations',
+                'slug' => 'index-decoration',
+            ],
+            [
+                'name' => 'Rechercher untype de décoration',
+                'slug' => 'search-decoration',
+            ],
+            [
+                'name' => 'Créer untype de décoration',
+                'slug' => 'create-decoration',
+            ],
+            [
+                'name' => 'Enrregistrer untype de décoration',
+                'slug' => 'store-decoration',
+            ],
+            [
+                'name' => 'Editer untype de décoration',
+                'slug' => 'edit-decoration',
+            ],
+            [
+                'name' => 'Mettre à jour untype de décoration',
+                'slug' => 'update-decoration',
             ]
                 // Documents
         ]);

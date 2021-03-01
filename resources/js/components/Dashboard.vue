@@ -53,15 +53,86 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-6">
-                <div class="table-responsive card">
-                    <a href="/dossiers" class="btn btn-primary mb-4">Gérer les dossiers</a>
-                    <a href="/utilisateurs" class="btn btn-success mb-4">Gérer les utilisateurs</a>
-                    <a href="/profil" class="btn btn-warning ">Gérer mon compte</a>
+            <div class="col-sm-2">
+                <div class="card">
+                    <a href="/dossiers" class="btn btn-primary mb-5">Gérer les dossiers</a>
+                    <a href="/decorations" class="btn btn-info mb-5">Gérer les décorations</a>
+                    <a href="/profil" class="btn btn-warning mb-5">Gérer mon compte</a>
+                    <a href="/utilisateurs" class="btn btn-success ">Gérer les utilisateurs</a>
                 </div>
             </div>
-            <div class="col-sm-6">
-                
+            <div class="col-sm-10">
+                <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Recherche Rapide</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <form class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">RECHERCHE PAR NOM PRENOM</label>
+                            <input type="text" class="form-control" v-model="search_fullname" placeholder="Tapez le nom et prénom...">
+                            <button type="button" class="btn btn-info btn-round btn-default mt-2" @click.prevent="searchByFullName" :disabled="loading">
+                                <template v-if="!loading">RECHERCHE</template>
+                                <template v-if="loading"><i class='fa fa-spin fa-spinner'></i> PATIENTEZ...</template>
+                            </button>
+                        </div>
+                    </form>
+                    <form class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">RECHERCHE PAR N° DECRET</label>
+                            <input type="text" class="form-control" v-model="search_decret" placeholder="Tapez le N° du décret...">
+                            <button type="button" class="btn btn-info btn-round btn-default mt-2" @click.prevent="searchByDecret" :disabled="loading">
+                                <template v-if="!loading">RECHERCHE</template>
+                                <template v-if="loading"><i class='fa fa-spin fa-spinner'></i> PATIENTEZ...</template>
+                            </button>
+                        </div>
+                    </form>
+                    <form class="col-sm-4">
+                        <div class="form-group">
+                            <label class="text-info">RECHERCHE PAR ANNEE DU DECRET</label>
+                            <input type="text" class="form-control" v-model="search_datedecret" placeholder="Tapez l'année du décret...">
+                            <button type="button" class="btn btn-info btn-round btn-default mt-2" @click.prevent="searchByDateDecret" :disabled="loading">
+                                <template v-if="!loading">RECHERCHE</template>
+                                <template v-if="loading"><i class='fa fa-spin fa-spinner'></i> PATIENTEZ...</template>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <h4 class="mt-5 text-center">Résultat de la recherche</h4>
+                    <table class="table table-bordered dataTable mt-5" id="" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>N° DECRET</th>
+                            <th>DATE DECRET</th>
+                            <th>DATE DECORATION</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>N° DECRET</th>
+                            <th>DATE DECRET</th>
+                            <th>DATE DECORATION</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr class="text-center" v-show="results.length" v-for="(document, index) in results" :key="document.id">
+                            <td class="align-middle">{{document.folder.number}}</td>
+                            <td class="align-middle">{{document.folder.date_decret}}</td>
+                            <td class="align-middle">{{document.folder.date_decoration}}</td>
+                            <td class="align-middle">
+                                <a :href="document.file" class="btn btn-primary btn-sm" download=""><i class="fa fa-download"></i> Télécharger le décret</a>
+                                <a :href="document.file" class="btn btn-warning btn-sm" target="_blank"><i class="fa fa-eye"></i> Voir le décret</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
             </div>
         </div>
     </div>
@@ -74,14 +145,61 @@
         data () {
             return {
                 errors: [],
+                search:'',
+                search_fullname:'',
+                search_decret:'',
+                search_datedecret:'',
+                results:[],
+                loading:false,
+                where:''
             }
         },
         mounted() {
         },
         methods: {
-
-        },
-        beforeDestroy: function(){
+            searchByFullName(){
+                this.search_decret = "";
+                this.search_datedecret = "";
+                this.search = this.search_fullname;
+                this.where = "description";
+                this.loading = true;
+                this.results = [];
+                if(this.search.length > 0){
+                    axios.get('/search/fullname/',{params: {where: this.where,search: this.search}}).then(response => {
+                        this.results = response.data;
+                        console.log(response.data);
+                        this.loading = false;
+                    });
+                }
+            },
+            searchByDecret(){
+                this.search_fullname = "";
+                this.search_datedecret = "";
+                this.search = this.search_decret;
+                this.where = "number";
+                this.loading = true;
+                this.results = [];
+                if(this.search.length > 0){
+                    axios.get('/search/decret',{params: {where: this.where,search: this.search}}).then(response => {
+                        this.results = response.data;
+                        this.loading = false;
+                    });
+                }
+            },
+            searchByDateDecret(){
+                this.search_decret = "";
+                this.search_fullname = "";
+                this.search = this.search_datedecret;
+                this.where = "date_decret";
+                this.loading = true;
+                this.results = [];
+                if(this.search.length > 0){
+                    axios.get('/search/datedecret',{params: {where: this.where,search: this.search}}).then(response => {
+                        this.results = response.data;
+                        this.loading = false;
+                    });
+                }
+            }
         },
         computed: {
             getErrors() {

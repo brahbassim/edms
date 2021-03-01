@@ -18,9 +18,10 @@ class FolderCollection extends ResourceCollection
             'data' => $this->collection->transform(function ($folder){
                 return [
                     'id' => $folder->id,
-                    'name' => $folder->name,
+                    'number' => $folder->number,
                     'description' => $folder->description,
-                    'reference' => $folder->reference,
+                    'date_decret' => $folder->date_decret,
+                    'date_decoration' => $folder->date_decoration,
                 ];
             })
         ];

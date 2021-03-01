@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="header">
-            <h4><strong>Gestion des documents du décret : <span class="text-primary">{{folder_data.number}}</span></strong></h4>
+            <h4><strong>Gestion des types de décorations</strong></h4>
         </div>
         <div class="row bg-white">
             <div class="col-sm-2 mt-2">
@@ -15,9 +15,9 @@
             <div class="col-sm-7">
                 <div class="form-group">
                     <div class="input-group mb-0">
-                        <input v-model="query" @keyup.enter="searchDocuments" type="text" class="form-control" placeholder="Rechercher...">
+                        <input v-model="query" @keyup.enter="searchDecorations" type="text" class="form-control" placeholder="Rechercher...">
                         <div class="input-group-append">
-                            <span class="input-group-text" @click.prevent="searchDocuments"><i class="fa fa-search"></i></span>
+                            <span class="input-group-text" @click.prevent="searchDecorations"><i class="fa fa-search"></i></span>
                         </div>
                     </div>
                 </div>
@@ -25,77 +25,59 @@
         </div>
         <div class="row bg-white mt-4 mb-4">
             <div class="col-sm-12">
-                <button type="button" class="btn  btn-primary mb-4 float-right" @click="create">Ajouter un document <i class="fa fa-file"></i></button>
+                <button type="button" class="btn  btn-primary mb-4 float-right" @click="create">Ajouter un type <i class="fa fa-user"></i></button>
                 <div class="table-responsive">
-                    <table class="table table-bordered dataTable" id="" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
+                            <th>NOM</th>
                             <th>DESCRIPTION</th>
-                            <th>TAILLE</th>
-                            <th>EXTENSION</th>
                             <th>ACTIONS</th>
                         </tr>
                         </thead>
-                        <tfoot>
-                        <tr>
-                            <th>DESCRIPTION</th>
-                            <th>TAILLE</th>
-                            <th>EXTENSION</th>
-                            <th>ACTIONS</th>
-                        </tr>
-                        </tfoot>
                         <tbody>
-                        <tr class="text-center" v-show="documents.length" v-for="(document, index) in documents" :key="document.id">
-                            <td class="align-middle">{{document.description}}</td>
-                            <td class="align-middle">{{document.filesize}}</td>
-                            <td class="align-middle">{{document.mimetype}}</td>
+                        <tr class="text-center" v-show="decorations.length" v-for="(decoration, index) in decorations" :key="decoration.id">
+                            <td class="align-middle">{{ decoration.name}}</td>
+                            <td class="align-middle">{{ decoration.description}}</td>
                             <td class="align-middle">
-                                <button @click.prevent="edit(document)" class="btn btn-warning btn-sm" style="width:30px;"><i class="fa fa-edit"></i></button>
-                                <a :href="document.file" class="btn btn-primary btn-sm" download=""><i class="fa fa-download"></i> Télécharger</a>
+                                <button @click.prevent="edit(decoration)" class="btn btn-warning btn-sm" style="width:30px;"><i class="fa fa-edit"></i></button>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-
-                    <pagination v-if="pagination.last_page >= 1"
-                                :pagination="pagination"
-                                :offset="5"
-                                @paginate="query === '' ? fetchDocuments() : searchDocuments()"
-                    ></pagination>
                 </div>
             </div>
         </div>
-        <div class="modal fade" style="margin-top: 5px;" id="document-store" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal fade" style="margin-top: 5px;" id="decoration-store" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header mb-4">
-                        <h4 v-if="!isEditing" class="title largeModalLabel">Création d'un document</h4>
-                        <h4 v-if="isEditing" class="title largeModalLabel">Modifier un document</h4>
+                        <h4 v-if="!isEditing" class="title largeModalLabel">Création d'un type</h4>
+                        <h4 v-if="isEditing" class="title largeModalLabel">Modifier un type</h4>
                         <button type="button" class="close" @click.prevent="resetForm" aria-label="Fermer" :disabled="loading">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="row clearfix">
-                            <div class="col-sm-12 text-center">
-                                <label class="float-left">Description (Facultative)</label>
-                                <textarea type="text" v-model="form.description" class="form-control" placeholder="Description du document" />
-                                <span class="text-danger" v-if="getErrors.description">
-                                        {{ getErrors.description[0] }}
-                                </span>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Nom <span class="text-danger">*</span></label>
+                                    <input type="text" v-model="form.name" class="form-control" placeholder="Entrer le nom" />
+                                    <span class="text-danger" v-if="getErrors.name">
+                                        {{ getErrors.name[0] }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                        <div class="row clearfix mt-4">
-                            <div class="col-sm-2 ">
+                         <div class="row clearfix">
+                            <div class="col-sm-12">
                                 <div class="form-group">
-                                    <div class="upload-btn-wrapper">
-                                        <label>Uploader <span class="text-danger">*</span></label>
-                                        <button class="btn-upload"><i class="fa fa-file">  Document <span class="text-danger">*</span></i></button>
-                                        <input type="file" ref="doc" id="file"><br>
-                                        <span class="text-danger" v-if="getErrors.doc">
-                                            {{ getErrors.doc[0] }}
-                                        </span>
-                                    </div>
+                                    <label>Description</label>
+                                    <textarea v-model="form.description" class="form-control" placeholder="Entrer la description" ></textarea>
+                                    <span class="text-danger" v-if="getErrors.description">
+                                        {{ getErrors.description[0] }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -120,39 +102,37 @@
 <script>
     import axios from 'axios';
     export default {
-        props: ['id','folder_data'],
         data () {
             return {
                 errors: [],
-                queryOptions: [{field: 'description' ,value: 'Description'}],
-                queryFiled: 'description',
+                queryOptions: [{field: 'name', value: 'Nom'},{field: 'description', value: 'Description'}],
+                queryFiled: 'name',
                 query:'',
-                documents: [],
-                form:{description: ''},
-                document: '',
+                decorations: [],
+                form:{name: '',description:''},
                 pagination:{current_page: 1},
                 loading: false,
                 isEditing:false,
             }
         },
         mounted() {
-            this.fetchDocuments();
+            this.fetchDecorations();
         },
         methods: {
-            fetchDocuments(){
-                axios.get('/dossiers/'+this.id+'/documents/?page='+this.pagination.current_page).then(response => {
-                    this.documents = response.data.data;
+            fetchDecorations(){
+                axios.get('/decorations/?page='+this.pagination.current_page).then(response => {
+                    this.decorations = response.data.data;
                 }).catch(error => {
                     this.toast(error);
                 })
             },
-            searchDocuments(){
+            searchDecorations(){
                 if (this.query === ''){
                     toastr['warning']('Le champ recherche est requit!', 'Oops', {timeOut: 5000, closeButton: true});
                 } else {
                     this.$Progress.start();
-                    axios.get('/dossiers/'+this.id+'/documents/search/'+this.queryFiled+'/'+this.query+'?page='+this.pagination.current_page).then(response => {
-                        this.documents = response.data.data;
+                    axios.get('/decorations/search/'+this.queryFiled+'/'+this.query+'?page='+this.pagination.current_page).then(response => {
+                        this.decorations = response.data.data;
                         this.$Progress.finish();
                     }).catch(error => {
                         this.$Progress.finish();
@@ -163,48 +143,45 @@
             save(){
                 let url = '';
                 if(!this.isEditing){
-                    url = '/dossiers/'+this.id+'/documents/nouveau';
+                    url = '/decorations/nouveau';
                 }else {
-                    url = '/dossiers/'+this.id+'/documents/'+this.form.id+'/edition';
+                    url = '/decorations/'+this.form.id+'/edition';
                 }
                 this.loading = true;
                 this.errors = [];
                 let formData = new FormData();
-                if(this.$refs.doc){
-                    formData.append('doc', this.$refs.doc.files[0] ? this.$refs.doc.files[0] : '');
-                }
+                formData.append('name', this.form.name);
                 formData.append('description', this.form.description);
-                console.log(this.form);
                 axios.post(url, formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(response => {
                     this.resetForm();
-                    toastr['success'](this.isEditing ? "Le document a bien été ajouté" : "Le document a bien été mis à jour", '', {timeOut: 5000, closeButton: true});
+                    toastr['success'](this.isEditing ? "Le type a bien été créé" : "Le type a bien été mis à jour", '', {timeOut: 5000, closeButton: true});
                     this.loading = false;
                     this.isEditing = false;
-                    this.fetchDocuments();
+                    this.fetchDecorations();
                 }).catch(error => {
                     this.loading = false;
                     this.toast(error);
                 });
             },
-            edit(document){
+            edit(decoration){
                 this.isEditing = true;
-                this.form = document;
-                $('#document-store').appendTo('body').modal('show');
+                this.form = decoration;
+                $('#decoration-store').appendTo('body').modal('show');
             },
             reload() {
                 this.query = '';
                 this.queryFiled = 'name';
                 this.$Progress.start();
-                this.fetchDocuments();
+                this.fetchDecorations();
                 this.$Progress.finish();
             },
             create(){
-                $('#document-store').appendTo('body').modal('show');
+                $('#decoration-store').appendTo('body').modal('show');
             },
-            destroy(document){
+            destroy(decoration){
                 swal({
                     title: "Êtes-vous sûr?",
-                    text: "Vous ne pourrez pas récupérer ce document après supression!",
+                    text: "Vous ne pourrez pas récupérer ce type après supression!",
                     type: "error",
                     showCancelButton: true,
                     confirmButtonText: 'Confirmer',
@@ -212,9 +189,9 @@
                     showCloseButton: true,
                     showLoaderOnConfirm: true
                 }, () => {
-                    axios.get('/dossiers/'+this.id+'/documents/'+document.id+'/supression').then(response => {
-                        this.fetchDocuments();
-                        toastr['success']("Le document a bien été supprimé", '', {timeOut: 5000, closeButton: true});
+                    axios.get('/decorations/'+decoration.id+'/supression').then(response => {
+                        this.fetchDecorations();
+                        toastr['success']("Le type a bien été supprimé", '', {timeOut: 5000, closeButton: true});
                     }).catch(error => {
                         this.toast(error);
                     });
@@ -229,24 +206,12 @@
                     toastr['error']('Une érreur est survenue!', 'Réessayez plus tard...', {timeOut: 5000, closeButton: true});
                 }
             },
-            download(){
-                axios.get('this.link', { responseType: 'blob' })
-                    .then(response => {
-                        const blob = new Blob([response.data], { type: 'application/pdf' })
-                        const link = document.createElement('a')
-                        link.href = URL.createObjectURL(blob)
-                        link.click()
-                        URL.revokeObjectURL(link.href)
-                    }).catch()
-            },
             resetForm(){
-                this.isEditing = false;
-                this.errors = [];
-                //this.$refs.doc = null;
+                
                 this.form.name = '';
-                this.form.description = '';
-                this.fetchDocuments();
-                $('#document-store').modal('hide');
+                
+                this.fetchDecorations();
+                $('#decoration-store').modal('hide');
             }
         },
         computed: {

@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="header">
-            <h4><strong>Gestion des dossier</strong></h4>
+            <h4><strong>Gestion des dossiers</strong></h4>
         </div>
         <div class="row bg-white">
             <div class="col-sm-2 mt-2">
@@ -25,22 +25,24 @@
         </div>
         <div class="row bg-white mt-4 mb-4">
             <div class="col-sm-12">
-                <button type="button" class="btn  btn-primary mb-4 float-right" @click="create">Ajouter un dossier <i class="fa fa-folder"></i></button>
+                <button type="button" class="btn  btn-primary mb-4 float-right" @click.prevent="create">Ajouter un dossier <i class="fa fa-folder"></i></button>
                 <div class="table-responsive">
                     <table class="table table-bordered" style="min-height: 300px;" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th>NOM</th>
+                            <th>N° DECRET</th>
                             <th>DESCRIPTION</th>
-                            <th>REFERENCE</th>
+                            <th>DATE DECRET</th>
+                            <th>DATE DECORATION</th>
                             <th>ACTIONS</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr class="text-center" v-show="folders.length" v-for="(folder, index) in folders" :key="folder.id">
-                            <td class="align-middle">{{ folder.name}}</td>
+                            <td class="align-middle">{{ folder.number}}</td>
                             <td class="align-middle">{{folder.description}}</td>
-                            <td class="align-middle">{{folder.reference}}</td>
+                            <td class="align-middle">{{folder.date_decret}}</td>
+                            <td class="align-middle">{{folder.date_decoration}}</td>
                             <td class="align-middle">
                                 <button @click.prevent="edit(folder)" class="btn btn-warning btn-sm" style="width:30px;"><i class="fa fa-edit"></i></button>
                                 <button @click.prevent="goFiles(folder.id)" class="btn btn-success btn-sm" ><i class="fa fa-file"></i> Gérer les  documents</button>
@@ -191,9 +193,11 @@
                 });
             },
             edit(folder){
-                this.isEditing = true;
-                this.form = folder;
-                $('#folder-store').appendTo('body').modal('show');
+                window.location.replace('/dossiers/'+folder.id+'/edition');
+                
+                //this.isEditing = true;
+                //this.form = folder;
+                //$('#folder-store').appendTo('body').modal('show');
             },
             reload() {
                 this.query = '';
@@ -203,7 +207,8 @@
                 this.$Progress.finish();
             },
             create(){
-                $('#folder-store').appendTo('body').modal('show');
+                window.location.replace(`/dossiers/nouveau/`);
+                //$('#folder-store').appendTo('body').modal('show');
             },
             destroy(folder){
                 swal({

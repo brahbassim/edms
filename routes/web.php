@@ -20,6 +20,9 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => ['second-login']], function() {
        // Dashboard route
        Route::get('/tableau-de-bord','DashboardController@index')->name('index-dashboard')->middleware('can:list-dashboard');
+       Route::get('/search/fullname/','DashboardController@search')->name('fullname-dashboard');
+       Route::get('/search/decret/','DashboardController@search')->name('decret-dashboard');
+       Route::get('/search/datedecret/','DashboardController@search')->name('datedecret-dashboard');
 
             
        // Users
@@ -38,8 +41,10 @@ Route::middleware(['auth'])->group(function () {
 
        // Folders
        Route::get('/dossiers','FolderController@index')->name('index-folder')->middleware('can:index-folder');
+       Route::get('/dossiers/nouveau','FolderController@create')->name('create-folder')->middleware('can:create-folder');
        Route::get('/dossiers/search/{field?}/{query?}','FolderController@search')->name('search-folder')->middleware('can:search-folder');
        Route::post('/dossiers/nouveau','FolderController@store')->name('store-folder')->middleware('can:store-folder');
+       Route::get('/dossiers/{id}/edition','FolderController@edit')->name('edit-folder')->middleware('can:edit-folder');
        Route::post('/dossiers/{id}/edition','FolderController@update')->name('update-folder')->middleware('can:update-folder');
        Route::get('/dossiers/{id}/supression','FolderController@destroy')->name('destroy-folder')->middleware('can:destroy-folder');
 
@@ -49,6 +54,14 @@ Route::middleware(['auth'])->group(function () {
        Route::post('/dossiers/{id}/documents/nouveau','DocumentController@store')->name('store-document')->middleware('can:store-document');
        Route::post('/dossiers/{id_folder}/documents/{id_doc}/edition','DocumentController@update')->name('update-document')->middleware('can:update-document');
        Route::get('/dossiers/{id_folder}/documents/{id_doc}/supression','DocumentController@destroy')->name('destroy-document')->middleware('can:destroy-document');
+
+       // Decorations
+       Route::get('/decorations','DecorationController@index')->name('index-decoration')->middleware('can:index-decoration');
+       Route::get('/decorations/search/{field?}/{query?}','DecorationController@search')->name('search-decoration')->middleware('can:search-decoration');
+       Route::post('/decorations/nouveau','DecorationController@store')->name('store-decoration')->middleware('can:store-decoration');
+       Route::post('/decorations/{id}/edition','DecorationController@update')->name('update-decoration')->middleware('can:update-decoration');
+       Route::get('/decorations/{id}/supression','DecorationController@destroy')->name('destroy-decoration')->middleware('can:destroy-decoration');
+
 
        Route::get('/profil','ProfileController@edit')->name('edit-profile')->middleware('can:edit-profile');
        Route::post('/profil','ProfileController@update')->name('update-profile')->middleware('can:update-profile');

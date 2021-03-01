@@ -40,7 +40,7 @@
                 <footer class="sticky-footer bg-white">
                     <div class="container my-auto">
                         <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; {{config('app.name')}} {{date('Y')}}</span>
+                            <span>Copyright &copy; {{config('app.name')}} CHANCELLERIE {{date('Y')}}. <span class="text-primary">By DevArts (+227 97215188)</span> </span>
                         </div>
                     </div>
                 </footer>

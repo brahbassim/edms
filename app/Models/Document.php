@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model
 {
     protected $fillable = [
-        'name',
         'description'
     ];
 
@@ -23,6 +22,11 @@ class Document extends Model
     public function scopeWhereSearch($query, $search)
     {
         return $query->where('name', 'LIKE', '%'.$search.'%');
+    }
+
+    public function folder()
+    {
+        return $this->belongsTo(Folder::class);
     }
 
    

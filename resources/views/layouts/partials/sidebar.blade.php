@@ -32,6 +32,16 @@
 
     <hr class="sidebar-divider">
 
+    <li class="nav-item {{ activeChild(['index-decoration','search-dodecoration','index-dodecoration']) }}">
+        <a class="nav-link" href="{{ route('index-decoration') }}">
+            <i class="fas fa-list"></i>
+            <span>Décorations</span>
+        </a>
+    </li>
+
+
+    <hr class="sidebar-divider">
+
     @can('edit-profile')
         <li class="nav-item {{ activeChild(['edit-profile']) }}">
             <a class="nav-link" href="{{ route('edit-profile') }}">
