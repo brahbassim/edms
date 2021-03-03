@@ -20,8 +20,6 @@ class CreateDocumentsTable extends Migration
             $table->string('filesize');
             $table->string('mimetype');
             $table->bigInteger('folder_id')->unsigned();
-            $table->foreign('folder_id')->references('id')->on('folders')
-                ->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

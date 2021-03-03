@@ -66,11 +66,11 @@
 
         private function validateGrade(Request $request,$id = null){
             $rules =  [];
-            if ($id){
+            /*if ($id){
                 $rules['name'] = 'nullable|unique:sub_categories,id,' . $id;
             }else{
                 $rules['name'] = 'required|unique:sub_categories';
-            }
+            }*/
             return $request->validate($rules);
         }
     }
