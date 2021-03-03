@@ -47,8 +47,8 @@
                             <td class="align-middle">{{user.phone}}</td>
                             <td class="align-middle"><span :class="['badge', 'badge-'+user.status_print[1]]">{{user.status_print[0]}}</span></td>
                             <td class="align-middle">
-                                <button @click.prevent="edit(user)" class="btn btn-warning btn-sm" style="width:30px;"><i class="fa fa-edit"></i></button>
-                                <button @click.prevent="destroy(user)" class="btn btn-danger btn-sm" style="width:30px;"><i class="fa fa-trash-alt"></i></button>
+                                <button v-show="$can('edit-user')" @click.prevent="edit(user)" class="btn btn-warning btn-sm" style="width:30px;"><i class="fa fa-edit"></i></button>
+                                <button v-show="$can('destroy-user')" @click.prevent="destroy(user)" class="btn btn-danger btn-sm" style="width:30px;"><i class="fa fa-trash-alt"></i></button>
                             </td>
                         </tr>
                         </tbody>
@@ -165,7 +165,7 @@
                             <div class="col-sm-6 text-center">
                                 <label> </label>
                                 <button class="btn btn-primary mb-2" type="button" data-toggle="collapse" data-target="#collapseRoles" aria-expanded="false" aria-controls="collapseRoles">
-                                    Attribuer des profils
+                                    Attribuer des roles
                                 </button>
                                 <div class="collapse" id="collapseRoles" style="max-height:300px; max-width:300px; margin-top-20px;overflow-y: scroll">
                                     <div class="card card-body" style="">

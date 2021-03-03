@@ -20,10 +20,13 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['middleware' => ['second-login']], function() {
        // Dashboard route
        Route::get('/tableau-de-bord','DashboardController@index')->name('index-dashboard')->middleware('can:list-dashboard');
-       Route::get('/search/fullname/','DashboardController@search')->name('fullname-dashboard');
-       Route::get('/search/decret/','DashboardController@search')->name('decret-dashboard');
-       Route::get('/search/datedecret/','DashboardController@search')->name('datedecret-dashboard');
+       Route::get('/search/fullname/','DashboardController@search')->name('fullname-dashboard')->middleware('can:fullname-dashboard');
+       Route::get('/search/decret/','DashboardController@search')->name('decret-dashboard')->middleware('can:decret-dashboard');
+       Route::get('/search/datedecret/','DashboardController@search')->name('datedecret-dashboard')->middleware('can:datedecret-dashboard');
 
+       // Stat
+       Route::get('/statistiques','StatController@index')->name('index-stat')->middleware('can:index-stat');
+       Route::get('/statistiques/{id}/{date}/search','StatController@search');
             
        // Users
        Route::get('/utilisateurs','UserController@index')->name('index-user')->middleware('can:index-user');
@@ -40,20 +43,20 @@ Route::middleware(['auth'])->group(function () {
        Route::get('/roles/{id}/supression','RoleController@destroy')->name('destroy-role')->middleware('can:destroy-role');
 
        // Folders
-       Route::get('/dossiers','FolderController@index')->name('index-folder')->middleware('can:index-folder');
-       Route::get('/dossiers/nouveau','FolderController@create')->name('create-folder')->middleware('can:create-folder');
-       Route::get('/dossiers/search/{field?}/{query?}','FolderController@search')->name('search-folder')->middleware('can:search-folder');
-       Route::post('/dossiers/nouveau','FolderController@store')->name('store-folder')->middleware('can:store-folder');
-       Route::get('/dossiers/{id}/edition','FolderController@edit')->name('edit-folder')->middleware('can:edit-folder');
-       Route::post('/dossiers/{id}/edition','FolderController@update')->name('update-folder')->middleware('can:update-folder');
-       Route::get('/dossiers/{id}/supression','FolderController@destroy')->name('destroy-folder')->middleware('can:destroy-folder');
+       Route::get('/decrets','FolderController@index')->name('index-folder')->middleware('can:index-folder');
+       Route::get('/decrets/nouveau','FolderController@create')->name('create-folder')->middleware('can:create-folder');
+       Route::get('/decrets/search/{field?}/{query?}','FolderController@search')->name('search-folder')->middleware('can:search-folder');
+       Route::post('/decrets/nouveau','FolderController@store')->name('store-folder')->middleware('can:store-folder');
+       Route::get('/decrets/{id}/edition','FolderController@edit')->name('edit-folder')->middleware('can:edit-folder');
+       Route::post('/decrets/{id}/edition','FolderController@update')->name('update-folder')->middleware('can:update-folder');
+       Route::get('/decrets/{id}/supression','FolderController@destroy')->name('destroy-folder')->middleware('can:destroy-folder');
 
        // Documents
-       Route::get('/dossiers/{id}/documents','DocumentController@index')->name('index-document')->middleware('can:index-document');
-       Route::get('/dossiers/{id}/documents/search/{field?}/{query?}','DocumentController@search')->name('search-document')->middleware('can:search-document');
-       Route::post('/dossiers/{id}/documents/nouveau','DocumentController@store')->name('store-document')->middleware('can:store-document');
-       Route::post('/dossiers/{id_folder}/documents/{id_doc}/edition','DocumentController@update')->name('update-document')->middleware('can:update-document');
-       Route::get('/dossiers/{id_folder}/documents/{id_doc}/supression','DocumentController@destroy')->name('destroy-document')->middleware('can:destroy-document');
+       Route::get('/decrets/{id}/documents','DocumentController@index')->name('index-document')->middleware('can:index-document');
+       Route::get('/decrets/{id}/documents/search/{field?}/{query?}','DocumentController@search')->name('search-document')->middleware('can:search-document');
+       Route::post('/decrets/{id}/documents/nouveau','DocumentController@store')->name('store-document')->middleware('can:store-document');
+       Route::post('/decrets/{id_folder}/documents/{id_doc}/edition','DocumentController@update')->name('update-document')->middleware('can:update-document');
+       Route::get('/decrets/{id_folder}/documents/{id_doc}/supression','DocumentController@destroy')->name('destroy-document')->middleware('can:destroy-document');
 
        // Decorations
        Route::get('/decorations','DecorationController@index')->name('index-decoration')->middleware('can:index-decoration');
@@ -62,6 +65,12 @@ Route::middleware(['auth'])->group(function () {
        Route::post('/decorations/{id}/edition','DecorationController@update')->name('update-decoration')->middleware('can:update-decoration');
        Route::get('/decorations/{id}/supression','DecorationController@destroy')->name('destroy-decoration')->middleware('can:destroy-decoration');
 
+       // SubDecorations
+       Route::get('/grades','SubDecorationController@index')->name('index-grade')->middleware('can:index-grade');
+       Route::post('/grades/nouveau','SubDecorationController@store')->name('store-grade')->middleware('can:store-grade');
+       Route::post('/grades/{id}/edition','SubDecorationController@update')->name('update-grade')->middleware('can:update-grade');
+       Route::get('/grades/{id}/supression','SubDecorationController@destroy')->name('destroy-grade')->middleware('can:destroy-grade');
+       Route::get('/grades/{id}/search','SubDecorationController@search');
 
        Route::get('/profil','ProfileController@edit')->name('edit-profile')->middleware('can:edit-profile');
        Route::post('/profil','ProfileController@update')->name('update-profile')->middleware('can:update-profile');

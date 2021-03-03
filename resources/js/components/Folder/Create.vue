@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="header">
-            <h4><strong>Création d'un dossier</strong></h4>
+            <h4><strong>Archivage d'un décret</strong></h4>
         </div>
         <div class="bg-white mt-4 mb-4">
             <div class="row clearfix">
@@ -65,16 +65,18 @@
                     <thead>
                         <tr>
                             <th style="width: 30%">Type de décoration</th>
-                            <th style="width: 25%">Nom de la stucture</th>
-                            <th style="width: 42%">Personnes affectées par le décret</th>
+                            <th style="width: 30%">Grade</th>
+                            <th style="width: 20%">Nom de la stucture</th>
+                            <th style="width: 37%">Personne affectée par le décret</th>
                             <th style="width: 3%">#</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(member, index) in form.members">
-                            <td><multiselect placeholder="Choisir un type de décoration" v-model="form.members[index].category_id"  track-by="id" label="name" :options="categories"></multiselect> </td>
-                            <td><input type="text" class="form-control" v-model="form.members[index].structure"></td>
-                            <td><textarea class="form-control" v-model="form.members[index].description"></textarea></td>
+                            <td><multiselect @input="updateSubCategories(member)"  placeholder="Choisir un type de décoration" v-model="form.members[index].category_id"  track-by="id" label="name" :options="categories"></multiselect> </td>
+                            <td><multiselect placeholder="Choisir un grade" v-model="form.members[index].sub_category_id"  track-by="id" label="name" :options="subCategories"></multiselect> </td>
+                            <td><input type="text" class="form-control" v-model="form.members[index].structure" placeholder="Nom de la structure"></td>
+                            <td><textarea class="form-control" v-model="form.members[index].description" placeholder="Nom, Prénom, Fonction..."></textarea></td>
                             <td style="text-align: center; width: 50px;" class="align-middle">
                                 <div class="form-material floating">
                                     <a href="#" style="text-align: center;" @click="removeLine(index)"><i style="color:#ff0000;" class="fa fa-trash"></i></a>
@@ -83,7 +85,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <input type="button" class="btn btn-link" @click.stop="addLine" value="Ajouter un lot de personnes +">
+                <button type="button" class="btn btn-primary" @click.stop="addLine"><i class="fa fa-plus"></i> Ajouter une personne </button>
             </div>
         </div>
     </div>
@@ -102,31 +104,39 @@
                 loading: false,
                 isEditing:false,
                 categories: [],
+                subCategories:[],
                 members: [],
             }
         },
         mounted() {
             this.categories = this.categories_data;
+            this.addLine();
         },
         methods: {
             save(){
                 this.loading = true;
                 this.errors = [];
-                axios.post('/dossiers/nouveau',this.form).then(response => {
+                axios.post('/decrets/nouveau',this.form).then(response => {
                     this.loading = false;
-                    window.location.replace('/dossiers/'+response.data.folder_id+'/documents');
+                    window.location.replace('/decrets/'+response.data.folder_id+'/documents');
                 }).catch(error => {
                     this.loading = false;
                     this.toast(error);
                 });
             },
             addLine() {
-                this.form.members.push({category_id:'',structure:'',description:''});
+                this.form.members.push({category_id:'',sub_category_id:'',structure:'',description:''});
             },
             removeLine(index) {
                 this.form.members.splice(index, 1);
             },
-            
+            updateSubCategories(member){
+                axios.get('/grades/'+member.category_id.id+'/search').then(response => {
+                    this.subCategories = response.data;
+                }).catch(error => {
+                    this.toast(error);
+                })
+            },
             toast(error){
                 if(error.response.status === 422){
                     this.errors = error.response.data.errors;

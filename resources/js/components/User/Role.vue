@@ -16,11 +16,11 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="text-center" v-show="roles.length" v-for="(role, index) in roles" :key="roles.id">
+                        <tr class="text-center" v-show="roles.length" v-for="(role, index) in roles" :key="role.id">
                             <td class="align-middle">{{ role.name}}</td>
                             <td class="align-middle">
-                                <button @click.prevent="edit(role)" class="btn btn-warning btn-sm" style="width:30px;"><i class="fa fa-edit"></i></button>
-                                <button @click.prevent="destroy(role)" class="btn btn-danger btn-sm" style="width:30px;"><i class="fa fa-trash-alt"></i></button>
+                                <button v-show="$can('edit-role')" @click.prevent="edit(role)" class="btn btn-warning btn-sm" style="width:30px;"><i class="fa fa-edit"></i></button>
+                                <button v-show="$can('destroy-role')" @click.prevent="destroy(role)" class="btn btn-danger btn-sm" style="width:30px;"><i class="fa fa-trash-alt"></i></button>
                             </td>
                         </tr>
                         </tbody>

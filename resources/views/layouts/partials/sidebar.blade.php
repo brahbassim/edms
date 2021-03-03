@@ -4,7 +4,7 @@
         <div class="sidebar-brand-icon ">
             <img src="{{asset('/img/edms.jpg')}}" alt="" style="width: 70px;">
         </div>
-        <div class="sidebar-brand-text mx-3">OSAAS</div>
+        <div class="sidebar-brand-text mx-3">EDMS</div>
     </a>
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
@@ -18,31 +18,48 @@
     </li>
     @endcan
 
-    <!-- Divider -->
+    @can('index-folder')
     <hr class="sidebar-divider ">
-
-    
-    <li class="nav-item {{ activeChild(['index-folder','search-document','index-document']) }}">
+      <li class="nav-item {{ activeChild(['index-folder','search-document','index-document']) }}">
         <a class="nav-link" href="{{ route('index-folder') }}">
-            <i class="fas fa-folder"></i>
-            <span>Dossiers</span>
+            <i class="fas fa-file"></i>
+            <span>Décrets</span>
         </a>
-    </li>
+    </li>  
+    @endcan
 
-
+    @can('index-stat')
+    <hr class="sidebar-divider ">
+      <li class="nav-item {{ activeChild(['index-stat']) }}">
+        <a class="nav-link" href="{{ route('index-stat') }}">
+            <i class="fas fa-project-diagram"></i>
+            <span>Statistiques</span>
+        </a>
+    </li>  
+    @endcan
+    
+    @can('index-decoration')
     <hr class="sidebar-divider">
-
-    <li class="nav-item {{ activeChild(['index-decoration','search-dodecoration','index-dodecoration']) }}">
+       <li class="nav-item {{ activeChild(['index-decoration','search-decoration','index-decoration']) }}">
         <a class="nav-link" href="{{ route('index-decoration') }}">
-            <i class="fas fa-list"></i>
+            <i class="fas fa-flag"></i>
             <span>Décorations</span>
         </a>
-    </li>
+    </li> 
+    @endcan
 
-
+    @can('index-grade')
     <hr class="sidebar-divider">
+        <li class="nav-item {{ activeChild(['index-grade']) }}">
+        <a class="nav-link" href="{{ route('index-grade') }}">
+            <i class="fas fa-list"></i>
+            <span>Grades</span>
+        </a>
+    </li>    
+    @endcan
 
     @can('edit-profile')
+    <hr class="sidebar-divider">
         <li class="nav-item {{ activeChild(['edit-profile']) }}">
             <a class="nav-link" href="{{ route('edit-profile') }}">
                 <i class="fas fa-user"></i>
@@ -52,6 +69,7 @@
     @endcan
 
     @can('index-user')
+     <hr class="sidebar-divider">
         <li class="nav-item {{ activeChild(['index-user','index-prof']) }}">
             <a class="nav-link" href="{{ route('index-user') }}">
                 <i class="fas fa-users"></i>

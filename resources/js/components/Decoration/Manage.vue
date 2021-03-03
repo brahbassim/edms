@@ -40,7 +40,8 @@
                             <td class="align-middle">{{ decoration.name}}</td>
                             <td class="align-middle">{{ decoration.description}}</td>
                             <td class="align-middle">
-                                <button @click.prevent="edit(decoration)" class="btn btn-warning btn-sm" style="width:30px;"><i class="fa fa-edit"></i></button>
+                                <button v-show="$can('edit-decoration')" @click.prevent="edit(decoration)" class="btn btn-warning btn-sm" style="width:30px;"><i class="fa fa-edit"></i></button>
+                                <button v-show="$can('destroy-decoration')" @click.prevent="destroy(decoration)" class="btn btn-danger btn-sm" style="width:30px;"><i class="fa fa-trash"></i></button>
                             </td>
                         </tr>
                         </tbody>

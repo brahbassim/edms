@@ -52,6 +52,7 @@
                             <td class="align-middle">
                                 <button @click.prevent="edit(document)" class="btn btn-warning btn-sm" style="width:30px;"><i class="fa fa-edit"></i></button>
                                 <a :href="document.file" class="btn btn-primary btn-sm" download=""><i class="fa fa-download"></i> Télécharger</a>
+                                <button v-show="$can('destroy-document')" @click.prevent="destroy(document)" class="btn btn-danger btn-sm" style="width:30px;"><i class="fa fa-trash"></i></button>
                             </td>
                         </tr>
                         </tbody>
@@ -140,7 +141,7 @@
         },
         methods: {
             fetchDocuments(){
-                axios.get('/dossiers/'+this.id+'/documents/?page='+this.pagination.current_page).then(response => {
+                axios.get('/decrets/'+this.id+'/documents/?page='+this.pagination.current_page).then(response => {
                     this.documents = response.data.data;
                 }).catch(error => {
                     this.toast(error);
@@ -151,7 +152,7 @@
                     toastr['warning']('Le champ recherche est requit!', 'Oops', {timeOut: 5000, closeButton: true});
                 } else {
                     this.$Progress.start();
-                    axios.get('/dossiers/'+this.id+'/documents/search/'+this.queryFiled+'/'+this.query+'?page='+this.pagination.current_page).then(response => {
+                    axios.get('/decrets/'+this.id+'/documents/search/'+this.queryFiled+'/'+this.query+'?page='+this.pagination.current_page).then(response => {
                         this.documents = response.data.data;
                         this.$Progress.finish();
                     }).catch(error => {
@@ -163,9 +164,9 @@
             save(){
                 let url = '';
                 if(!this.isEditing){
-                    url = '/dossiers/'+this.id+'/documents/nouveau';
+                    url = '/decrets/'+this.id+'/documents/nouveau';
                 }else {
-                    url = '/dossiers/'+this.id+'/documents/'+this.form.id+'/edition';
+                    url = '/decrets/'+this.id+'/documents/'+this.form.id+'/edition';
                 }
                 this.loading = true;
                 this.errors = [];
@@ -212,7 +213,7 @@
                     showCloseButton: true,
                     showLoaderOnConfirm: true
                 }, () => {
-                    axios.get('/dossiers/'+this.id+'/documents/'+document.id+'/supression').then(response => {
+                    axios.get('/decrets/'+this.id+'/documents/'+document.id+'/supression').then(response => {
                         this.fetchDocuments();
                         toastr['success']("Le document a bien été supprimé", '', {timeOut: 5000, closeButton: true});
                     }).catch(error => {

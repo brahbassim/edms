@@ -25,6 +25,7 @@ class PermissionSeeder extends Seeder
                 'name' => 'Recherche par date de décret',
                 'slug' => 'datedecret-dashboard',
             ],
+            // Profile
             [
                 'name' => 'Editer son profil',
                 'slug' => 'edit-profile',
@@ -32,7 +33,8 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'Mettre à jour son profil',
                 'slug' => 'update-profile',
-            ],// Profile permissions ---------------------
+            ],
+            // Users
             [
                 'name' => 'Lister les users',
                 'slug' => 'index-user',
@@ -64,7 +66,8 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'Supprimer un user',
                 'slug' => 'destroy-user',
-            ],// Profiles
+            ],
+            // Roles
             [
                 'name' => 'Lister les roles',
                 'slug' => 'index-role',
@@ -97,35 +100,41 @@ class PermissionSeeder extends Seeder
                 'name' => 'Supprimer un role',
                 'slug' => 'destroy-role',
             ],
+            // Dashboard permission
             [
                 'name' => 'Visualiser tableau de bord',
                 'slug' => 'list-dashboard',
-            ],// Dashboard permission ---------------------
+            ],
+            // Folders
             [
-                'name' => 'Lister les dossiers',
+                'name' => 'Lister les décrets',
                 'slug' => 'index-folder',
             ],
             [
-                'name' => 'Rechercher un dossier',
+                'name' => 'Rechercher un décret',
                 'slug' => 'search-folder',
             ],
             [
-                'name' => 'Créer un dossier',
+                'name' => 'Créer un décret',
                 'slug' => 'create-folder',
             ],
             [
-                'name' => 'Enrregistrer un dossier',
+                'name' => 'Enrregistrer un décret',
                 'slug' => 'store-folder',
             ],
             [
-                'name' => 'Editer un dossier',
+                'name' => 'Editer un décret',
                 'slug' => 'edit-folder',
             ],
             [
-                'name' => 'Mettre à jour un dossier',
+                'name' => 'Mettre à jour un décret',
                 'slug' => 'update-folder',
             ],
-                // Folders
+            [
+                'name' => 'Supprimer un décret',
+                'slug' => 'destroy-folder',
+            ],
+            // Documents
             [
                 'name' => 'Lister les documents',
                 'slug' => 'index-document',
@@ -151,11 +160,16 @@ class PermissionSeeder extends Seeder
                 'slug' => 'update-document',
             ],
             [
+                'name' => 'Supprimer un document',
+                'slug' => 'destroy-document',
+            ],
+            // Decorations
+            [
                 'name' => 'Lister les types de décorations',
                 'slug' => 'index-decoration',
             ],
             [
-                'name' => 'Rechercher untype de décoration',
+                'name' => 'Rechercher un type de décoration',
                 'slug' => 'search-decoration',
             ],
             [
@@ -163,7 +177,7 @@ class PermissionSeeder extends Seeder
                 'slug' => 'create-decoration',
             ],
             [
-                'name' => 'Enrregistrer untype de décoration',
+                'name' => 'Enrregistrer un type de décoration',
                 'slug' => 'store-decoration',
             ],
             [
@@ -171,10 +185,43 @@ class PermissionSeeder extends Seeder
                 'slug' => 'edit-decoration',
             ],
             [
-                'name' => 'Mettre à jour untype de décoration',
+                'name' => 'Mettre à jour un type de décoration',
                 'slug' => 'update-decoration',
-            ]
-                // Documents
+            ],
+            [
+                'name' => 'Supprimer un type de décoration',
+                'slug' => 'destroy-decoration',
+            ],
+            //Grades
+            [
+                'name' => 'Lister les grades',
+                'slug' => 'index-grade',
+            ],
+            [
+                'name' => 'Créer un grade',
+                'slug' => 'create-grade',
+            ],
+            [
+                'name' => 'Enrregistrer un grade',
+                'slug' => 'store-grade',
+            ],
+            [
+                'name' => 'Editer un grade',
+                'slug' => 'edit-grade',
+            ],
+            [
+                'name' => 'Mettre à jour un grade',
+                'slug' => 'update-grade',
+            ],
+            [
+                'name' => 'Supprimer un grade',
+                'slug' => 'destroy-grade',
+            ],
+            // Stat
+            [
+                'name' => 'Lister les statistiques',
+                'slug' => 'index-stat',
+            ],
         ]);
     }
 }

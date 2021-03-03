@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="header">
-            <h4><strong>Mise à jour d'un dossier</strong></h4>
+            <h4><strong>Mise à jour d'un décret</strong></h4>
         </div>
         <div class="bg-white mt-4 mb-4">
             <div class="row clearfix">
@@ -65,14 +65,16 @@
                     <thead>
                         <tr>
                             <th style="width: 30%">Type de décoration</th>
-                            <th style="width: 25%">Nom de la stucture</th>
-                            <th style="width: 42%">Personnes affectées par le décret</th>
+                            <th style="width: 30%">Grade</th>
+                            <th style="width: 20%">Nom de la stucture</th>
+                            <th style="width: 37%">Personne affectée par le décret</th>
                             <th style="width: 3%">#</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(member, index) in form.members">
-                            <td><multiselect placeholder="Choisir un type de décoration" v-model="form.members[index].category_id"  track-by="id" label="name" :options="categories"></multiselect> </td>
+                            <td><multiselect @input="updateSubCategories(member,index)"  placeholder="Choisir un type de décoration" v-model="form.members[index].category_id"  track-by="id" label="name" :options="categories"></multiselect> </td>
+                            <td><multiselect placeholder="Choisir un grade" v-model="form.members[index].sub_category_id"  track-by="id" label="name" :options="subCategories"></multiselect> </td>
                             <td><input type="text" class="form-control" v-model="form.members[index].structure"></td>
                             <td><textarea class="form-control" v-model="form.members[index].description"></textarea></td>
                             <td style="text-align: center; width: 50px;" class="align-middle">
@@ -102,32 +104,41 @@
                 loading: false,
                 isEditing:false,
                 categories: [],
+                subCategories:[],
             }
         },
         mounted() {
             this.categories = this.categories_data;
             this.form = this.folder_data;
-            //this.form.members = this.members_data;
         },
         methods: {
             save(folder){
                 this.loading = true;
                 this.errors = [];
-                axios.post('/dossiers/'+folder.id+'/edition',this.form).then(response => {
+                axios.post('/decrets/'+folder.id+'/edition',this.form).then(response => {
                     this.loading = false;
-                    window.location.replace('/dossiers');
+                    window.location.replace('/decrets');
                 }).catch(error => {
                     this.loading = false;
                     this.toast(error);
                 });
             },
             addLine() {
-                this.form.members.push({category_id:'',structure:'',description:''});
+                this.form.members.push({category_id:'',sub_category_id:'',structure:'',description:''});
+            },
+            updateSubCategories(member,index){
+                if(this.form.members[index].sub_category_id.category_id != this.form.members[index].category_id.id){
+                    this.form.members[index].sub_category_id = '';
+                }
+                axios.get('/grades/'+member.category_id.id+'/search').then(response => {
+                    this.subCategories = response.data;
+                }).catch(error => {
+                    this.toast(error);
+                })
             },
             removeLine(index) {
                 this.form.members.splice(index, 1);
             },
-            
             toast(error){
                 if(error.response.status === 422){
                     this.errors = error.response.data.errors;

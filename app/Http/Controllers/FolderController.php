@@ -6,6 +6,7 @@ use App\Models\Folder;
 use App\Models\Member;
 use App\Http\Resources\FolderCollection;
 use App\Models\Category;
+use App\Models\SubCategory;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -57,7 +58,8 @@ class FolderController extends Controller
         foreach ($request->members as $key => $member){
             array_push($members,[
                 'folder_id' => $folder->id,
-                'category_id' => $member['category_id']['id'],
+                'category_id' => $member['category_id'] ? $member['category_id']['id'] : null,
+                'sub_category_id' => $member['sub_category_id'] ? $member['sub_category_id']['id'] : null,
                 'structure' => $member['structure'],
                 'description' => $member['description'],
             ]);
@@ -76,9 +78,11 @@ class FolderController extends Controller
         $folder_members = [];
         foreach ($data->members as $member){
             $cat = Category::find($member->category_id);
+            $subCat = SubCategory::where('id',$member->sub_category_id)->first();
             array_push($folder_members,[
                 'id' => $member->id,
                 'category_id' => $cat,
+                'sub_category_id' => $subCat,
                 'description' => $member->description,
                 'structure' => $member->structure
             ]);
@@ -116,7 +120,8 @@ class FolderController extends Controller
         foreach ($request->members as $key => $member){
             array_push($members,[
                 'folder_id' => $folder->id,
-                'category_id' => $member['category_id']['id'],
+                'category_id' => $member['category_id'] ? $member['category_id']['id'] : null,
+                'sub_category_id' => $member['sub_category_id'] ? $member['sub_category_id']['id'] : null,
                 'structure' => $member['structure'],
                 'description' => $member['description'],
             ]);

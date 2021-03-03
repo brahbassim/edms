@@ -26,7 +26,7 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Dossiers</div>
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Décrets</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{folders_nbr}}</div>
                             </div>
                             <div class="col-auto">
@@ -53,15 +53,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-2">
-                <div class="card">
-                    <a href="/dossiers" class="btn btn-primary mb-5">Gérer les dossiers</a>
-                    <a href="/decorations" class="btn btn-info mb-5">Gérer les décorations</a>
-                    <a href="/profil" class="btn btn-warning mb-5">Gérer mon compte</a>
-                    <a href="/utilisateurs" class="btn btn-success ">Gérer les utilisateurs</a>
-                </div>
-            </div>
-            <div class="col-sm-10">
+           
+            <div class="col-sm-12">
                 <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Recherche Rapide</h6>
