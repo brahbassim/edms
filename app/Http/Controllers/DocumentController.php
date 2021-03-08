@@ -104,9 +104,9 @@ class DocumentController extends Controller
             return response()->json(['success' => true],200);
         }
 
-        public function destroy($id)
+        public function destroy($folder_id, $doc_id)
         {
-            $document = Document::find($id);
+            $document = Document::find($doc_id);
             $document->delete();
             return response()->json(['OK'],200);
         }
