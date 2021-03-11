@@ -98,27 +98,36 @@
                         <thead>
                         <tr>
                             <th>N° DECRET</th>
-                            <th>DATE DECRET</th>
-                            <th>DATE DECORATION</th>
+                            <th>DATE</th>
+                            <th>DECORATION</th>
+                            <th>STRUCTURE</th>
                             <th>ACTIONS</th>
                         </tr>
                         </thead>
                         <tfoot>
                         <tr>
                             <th>N° DECRET</th>
-                            <th>DATE DECRET</th>
-                            <th>DATE DECORATION</th>
+                            <th>DATE</th>
+                            <th>DECORATION</th>
+                            <th>STRUCTURE</th>
                             <th>ACTIONS</th>
                         </tr>
                         </tfoot>
                         <tbody>
-                        <tr class="text-center" v-show="results.length" v-for="(document, index) in results" :key="document.id">
-                            <td class="align-middle">{{document.folder.number}}</td>
-                            <td class="align-middle">{{document.folder.date_decret}}</td>
-                            <td class="align-middle">{{document.folder.date_decoration}}</td>
+                        <tr class="text-center" v-show="results.length" v-for="(result, index) in results" :key="result.id">
+                            <td class="align-middle">{{result.number}}</td>
                             <td class="align-middle">
-                                <a :href="document.file" class="btn btn-primary btn-sm" download=""><i class="fa fa-download"></i> Télécharger le décret</a>
-                                <a :href="document.file" class="btn btn-warning btn-sm" target="_blank"><i class="fa fa-eye"></i> Voir le décret</a>
+                                <p>Décret : {{result.date_decret}}</p>
+                                <p>Décoration : {{result.date_decoration}}</p>
+                            </td>
+                            <td class="align-middle">
+                                <p>Décoration : {{result.decoration}}</p>
+                                <p>Grade : {{result.grade}}</p>
+                            </td>
+                            <td class="align-middle">{{result.structure}}</td>
+                            <td class="align-middle">
+                                <a :href="result.file" class="btn btn-primary btn-sm" download=""><i class="fa fa-download"></i> Télécharger le décret</a>
+                                <a :href="result.file" class="btn btn-warning btn-sm" target="_blank"><i class="fa fa-eye"></i> Voir le décret</a>
                             </td>
                         </tr>
                         </tbody>
