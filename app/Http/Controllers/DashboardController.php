@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Http\Controllers;
@@ -41,6 +42,7 @@ class DashboardController extends Controller
         $documents = [];
 
 
+
         if($request->where=="description"){
             //Fullname
             $members = Member::where($request->where,'LIKE', '%'.$request->search.'%')->with('category')->with('subCategory')->get();
@@ -53,7 +55,7 @@ class DashboardController extends Controller
                 $f = Folder::where('id', $members[$i]->folder_id)->first();
                 $d = Document::where('folder_id', $members[$i]->folder_id)->first();
                 array_push($data,[
-                    'number' => $f->number,
+                    //'number' => $f->number,
                     'date_decret' => $f->date_decret,
                     'date_decoration' => $f->date_decoration,
                     'file' => $d->file,
